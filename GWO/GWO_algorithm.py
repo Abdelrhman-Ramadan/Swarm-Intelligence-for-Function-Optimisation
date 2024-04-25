@@ -1,9 +1,8 @@
 import numpy as np
 
 
-def GWO(obj_func, bounds, num_wolves=5, max_iterations=100):
+def GWO(obj_func, bounds, num_wolves=5, dim=2, max_iterations=100):
     # Initialize the grey wolves population randomly
-    dim = len(bounds)
     population = np.random.uniform(bounds[0], bounds[1], size=(num_wolves, dim))
 
     alpha_pos = None
