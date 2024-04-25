@@ -1,9 +1,8 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+
+from Common_libs import np , plt , FuncAnimation
 
 
-def pso_animated(objective_function, bounds, n_particles, n_iterations, d=2, clip=0, plot_3d=0):
+def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, clip=1, plot_3d=0):
     # Initializing the PSO weights
     inertia_weight = 0.5  # w
     cognitive_weight = 1  # c_1
@@ -74,7 +73,7 @@ def pso_animated(objective_function, bounds, n_particles, n_iterations, d=2, cli
         ax.legend()
         ax.set_title(f'Iteration {i + 1}')
 
-    ani = FuncAnimation(fig, animate, frames=n_iterations, interval=500)
+    ani = FuncAnimation(fig, animate, frames=n_iterations, interval=0.1)
     plt.show()
 
     return global_best_position, global_best_fitness

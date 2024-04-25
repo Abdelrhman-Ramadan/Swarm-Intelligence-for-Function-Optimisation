@@ -1,7 +1,7 @@
-import numpy as np
-from PSO_algorithm import PSO
-# import GWO
-# from GWO_animated import GWO_animated
+
+from GWO_Animated import GWO_animated
+from PSO_Animated import PSO_animated
+from Common_libs import np , plt , FuncAnimation
 
 
 def bohachevsky_function(x):
@@ -37,12 +37,12 @@ def himmelblau_function(x):
 
 # Define the bounds, number of particles, and number of iterations
 bounds = (-10, 10)  # Example bounds for two variables
-n_particles = 40
-n_iterations = 400
+n_particles = 400
+n_iterations = 500
 
 # np.random.seed(20)
 # Call the PSO function
-best_position, best_value = PSO(himmelblau_function, bounds, n_particles, n_iterations)
+best_position, best_value = PSO_animated(bohachevsky_function, bounds, n_particles, n_iterations,plot_3d=1)
 
 print("Best position:", best_position)
 print("Best value: {:f}".format(best_value))

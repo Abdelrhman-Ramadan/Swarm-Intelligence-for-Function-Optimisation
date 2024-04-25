@@ -1,6 +1,4 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from Common_libs import np , plt , FuncAnimation
 
 
 def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot_3d=0):
@@ -93,7 +91,7 @@ def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot
         ax.legend()
         ax.set_title(f'Iteration {iteration + 1}')
 
-    ani = FuncAnimation(fig, animate, frames=max_iterations, interval=.001)
+    ani = FuncAnimation(fig, animate, frames=max_iterations, interval=0.1)
     plt.show()
 
     return alpha_pos, alpha_score
