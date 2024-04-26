@@ -87,8 +87,8 @@ ttk.Label(frame, text="Plot :").grid(row=4, column=0, sticky="w", pady=5)
 # Comboboxes
 benchmark_var = tk.StringVar()
 benchmark_combobox = ttk.Combobox(frame, textvariable=benchmark_var,
-                                  values=["bohachevsky_function", "ackley_function", "schwefel_function",
-                                          "himmelblau_function"], width=20, state="readonly")
+                        values=["bohachevsky_function", "ackley_function", "schwefel_function",
+                        "himmelblau_function"], width=20, state="readonly")
 benchmark_combobox.grid(row=0, column=1, pady=5, padx=5)
 benchmark_combobox.set("bohachevsky_function")
 # Entries
@@ -118,3 +118,6 @@ output_text = scrolledtext.ScrolledText(frame, width=50, height=10, state=tk.DIS
 output_text.grid(row=6, column=0, columnspan=3, pady=10, sticky="nsew")
 root.resizable(False, False)
 root.mainloop()
+
+
+

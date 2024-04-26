@@ -73,7 +73,7 @@ def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, cli
         ax.legend()
         ax.set_title(f'Iteration {i + 1}')
 
-    ani = FuncAnimation(fig, animate, frames=n_iterations, interval=0.1)
+    ani = FuncAnimation(fig, animate, frames=n_iterations, interval=0.1,repeat=False)
     plt.show()
 
     return global_best_position, global_best_fitness

@@ -90,8 +90,11 @@ def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot
             ax.scatter(delta_pos[0], delta_pos[1], color='yellow', marker='s', label='Delta Wolf')
         ax.legend()
         ax.set_title(f'Iteration {iteration + 1}')
+        
 
-    ani = FuncAnimation(fig, animate, frames=max_iterations, interval=0.1)
+    ani = FuncAnimation(fig, animate, frames=max_iterations, interval=0.1,repeat=False)
     plt.show()
 
+
+   
     return alpha_pos, alpha_score
