@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=0):
+def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=1):
     # Initializing the PSO weights
     inertia_weight = 0.5  # w
     cognitive_weight = 1  # c_1

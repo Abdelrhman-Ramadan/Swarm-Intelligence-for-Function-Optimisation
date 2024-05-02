@@ -12,7 +12,7 @@ bounds = {
     'ackley_function': [(-32.768, 32.768), ([0, 0], 0)],
     'schwefel_function': [(-500, 500), ([420.9687, 420.9687], 0)],
     'himmelblau_function': [(-5, 5), ([3, 2], 0), ([-2.805118, 3.131312], 0), ([-3.779310, -3.283186], 0),
-    ([-1.848126, 3.584428], 0)]
+                            ([-1.848126, 3.584428], 0)]
 }
 
 
@@ -87,8 +87,8 @@ ttk.Label(frame, text="Plot :").grid(row=4, column=0, sticky="w", pady=5)
 # Comboboxes
 benchmark_var = tk.StringVar()
 benchmark_combobox = ttk.Combobox(frame, textvariable=benchmark_var,
-                        values=["bohachevsky_function", "ackley_function", "schwefel_function",
-                        "himmelblau_function"], width=20, state="readonly")
+                                  values=["bohachevsky_function", "ackley_function", "schwefel_function",
+                                          "himmelblau_function"], width=20, state="readonly")
 benchmark_combobox.grid(row=0, column=1, pady=5, padx=5)
 benchmark_combobox.set("bohachevsky_function")
 # Entries
@@ -118,6 +118,3 @@ output_text = scrolledtext.ScrolledText(frame, width=50, height=10, state=tk.DIS
 output_text.grid(row=6, column=0, columnspan=3, pady=10, sticky="nsew")
 root.resizable(False, False)
 root.mainloop()
-
-
-

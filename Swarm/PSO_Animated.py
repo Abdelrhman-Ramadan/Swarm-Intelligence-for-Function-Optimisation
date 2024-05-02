@@ -1,5 +1,4 @@
-
-from Common_libs import np , plt , FuncAnimation
+from Swarm.Common_libs import np, plt, FuncAnimation
 
 
 def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, clip=1, plot_3d=0):
@@ -73,10 +72,7 @@ def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, cli
         ax.legend()
         ax.set_title(f'Iteration {i + 1}')
 
-    ani = FuncAnimation(fig, animate, frames=n_iterations, interval=0.1,repeat=False)
+    ani = FuncAnimation(fig, animate, frames=n_iterations, interval=0.1, repeat=False)
     plt.show()
 
     return global_best_position, global_best_fitness
-
-
-

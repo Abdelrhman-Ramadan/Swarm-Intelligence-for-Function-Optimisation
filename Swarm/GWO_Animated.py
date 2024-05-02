@@ -1,16 +1,25 @@
-from Common_libs import np , plt , FuncAnimation
+from Swarm.Common_libs import np, plt, FuncAnimation
 
 
 def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot_3d=0):
     # Initialize the grey wolves population randomly
     population = np.random.uniform(bounds[0], bounds[1], size=(num_wolves, dim))
 
-    alpha_pos = None
-    beta_pos = None
-    delta_pos = None
-    alpha_score = float('inf')
-    beta_score = float('inf')
-    delta_score = float('inf')
+    # Calculate fitness for each wolf in the population
+    # scores = obj_func(population)
+    scores = np.apply_along_axis(obj_func, 1, population)
+
+    # Calculate alpha, beta, and delta positions
+    alpha_index, beta_index, delta_index = np.argsort(scores)[:3]
+
+    alpha_score = scores[alpha_index]
+    alpha_pos = population[alpha_index]
+
+    beta_score = scores[beta_index]
+    beta_pos = population[beta_index]
+
+    delta_score = scores[delta_index]
+    delta_pos = population[delta_index]
 
     if plot_3d == 1:
         fig = plt.figure()
@@ -26,23 +35,6 @@ def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot
     # Define the main loop
     def animate(iteration):
         nonlocal population, alpha_pos, beta_pos, delta_pos, alpha_score, beta_score, delta_score
-        # Calculate fitness for each wolf in the population
-        scores = np.apply_along_axis(obj_func, 1, population)
-
-        # Update alpha, beta, and delta positions
-        alpha_index = np.argmin(scores)
-        beta_index = np.argsort(scores)[1]
-        delta_index = np.argsort(scores)[2]
-
-        if scores[alpha_index] < alpha_score:
-            alpha_score = scores[alpha_index]
-            alpha_pos = population[alpha_index]
-        if scores[beta_index] < beta_score:
-            beta_score = scores[beta_index]
-            beta_pos = population[beta_index]
-        if scores[delta_index] < delta_score:
-            delta_score = scores[delta_index]
-            delta_pos = population[delta_index]
 
         # Update the positions of the wolves
         a = 2 - iteration * (2 / max_iterations)  # Linearly decreased from 2 to 0
@@ -71,6 +63,25 @@ def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot
 
         # Apply boundary constraints
         population = np.clip(population, bounds[0], bounds[1])
+
+        # Calculate fitness for each wolf in the population
+        scores = np.apply_along_axis(obj_func, 1, population)
+
+        # Update alpha, beta, and delta positions
+        alpha_index = np.argmin(scores)
+        beta_index = np.argsort(scores)[1]
+        delta_index = np.argsort(scores)[2]
+
+        if scores[alpha_index] < alpha_score:
+            alpha_score = scores[alpha_index]
+            alpha_pos = population[alpha_index]
+        if scores[beta_index] < beta_score:
+            beta_score = scores[beta_index]
+            beta_pos = population[beta_index]
+        if scores[delta_index] < delta_score:
+            delta_score = scores[delta_index]
+            delta_pos = population[delta_index]
+
         ax.clear()
         if plot_3d == 1:
             ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.6)
@@ -90,11 +101,8 @@ def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot
             ax.scatter(delta_pos[0], delta_pos[1], color='yellow', marker='s', label='Delta Wolf')
         ax.legend()
         ax.set_title(f'Iteration {iteration + 1}')
-        
 
-    ani = FuncAnimation(fig, animate, frames=max_iterations, interval=0.1,repeat=False)
+    ani = FuncAnimation(fig, animate, frames=max_iterations, interval=0.1, repeat=False)
     plt.show()
 
-
-   
     return alpha_pos, alpha_score
