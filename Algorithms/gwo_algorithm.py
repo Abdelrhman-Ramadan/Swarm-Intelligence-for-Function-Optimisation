@@ -21,6 +21,8 @@ def GWO(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2):
     delta_score = scores[delta_index]
     delta_pos = population[delta_index]
 
+    best_fitness_history = [alpha_score]
+
     # Define the main loop
     for iteration in range(max_iterations):
 
@@ -71,4 +73,6 @@ def GWO(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2):
             delta_score = scores[delta_index]
             delta_pos = population[delta_index]
 
-    return alpha_pos, alpha_score
+        best_fitness_history.append(alpha_score)
+
+    return alpha_pos, alpha_score, best_fitness_history

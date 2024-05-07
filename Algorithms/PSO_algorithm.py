@@ -19,6 +19,8 @@ def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=1):
     global_best_position = particles_positions[np.argmin(local_best_fitness)]
     global_best_fitness = objective_function(global_best_position)
 
+    best_fitness_history = [global_best_fitness]
+
     for _ in range(n_iterations):
         r1, r2 = np.random.uniform(0, 1, (n_particles, d)), np.random.uniform(0, 1, (n_particles, d))
         # Updating the velocity
@@ -45,4 +47,6 @@ def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=1):
             global_best_position = particles_positions[np.argmin(current_fitness_values)]
             global_best_fitness = np.min(current_fitness_values)
 
-    return global_best_position, global_best_fitness
+        best_fitness_history.append(global_best_fitness)
+
+    return global_best_position, global_best_fitness, best_fitness_history
