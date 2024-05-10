@@ -1,11 +1,12 @@
 from Swarm.Common_libs import np, plt, FuncAnimation
 
 
-def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, clip=1, plot_3d=0):
+def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, clip=1, w='ldw', c1=1.5, c2=1.5, plot_3d=0):
     # Initializing the PSO weights
-    inertia_weight = 0.5  # w
-    cognitive_weight = 1  # c_1
-    social_weight = 2  # c_2
+    inertia_weight = w
+    w_max, w_min = 0.9, 0.1
+    cognitive_weight = c1
+    social_weight = c2
 
     # Initializing the particles with random positions and velocities within the bounds
     particles_positions = np.random.uniform(bounds[0], bounds[1], (n_particles, d))
@@ -30,9 +31,13 @@ def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, cli
     Z = objective_function(np.array([X, Y]))
 
     def animate(i):
-        nonlocal particles_positions, particles_velocity, local_best_positions, local_best_fitness, global_best_position, global_best_fitness
+        nonlocal particles_positions, particles_velocity, \
+            local_best_positions, local_best_fitness, \
+            global_best_position, global_best_fitness, inertia_weight
 
         r1, r2 = np.random.uniform(0, 1, (n_particles, d)), np.random.uniform(0, 1, (n_particles, d))
+        if w == 'ldw':
+            inertia_weight = w_max - (i / n_iterations) * (w_max - w_min)
         # Updating the velocity
         particles_velocity = (inertia_weight * particles_velocity +
                               cognitive_weight * r1 * (local_best_positions - particles_positions) +

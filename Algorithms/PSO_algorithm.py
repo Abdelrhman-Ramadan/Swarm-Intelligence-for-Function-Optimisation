@@ -1,11 +1,13 @@
 import numpy as np
 
 
-def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=1):
+def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=1, w='ldw', c1=1.5, c2=1.5):
     # Initializing the PSO weights
-    inertia_weight = 0.5  # w
-    cognitive_weight = 1  # c_1
-    social_weight = 2  # c_2
+
+    inertia_weight = w
+    w_max, w_min = 0.9, 0.1
+    cognitive_weight = c1
+    social_weight = c2
 
     # Initializing the particles with random positions and velocities within the bounds
     particles_positions = np.random.uniform(bounds[0], bounds[1], (n_particles, d))
@@ -21,8 +23,10 @@ def PSO(objective_function, bounds, n_particles, n_iterations, d=2, clip=1):
 
     best_fitness_history = [global_best_fitness]
 
-    for _ in range(n_iterations):
+    for t in range(n_iterations):
         r1, r2 = np.random.uniform(0, 1, (n_particles, d)), np.random.uniform(0, 1, (n_particles, d))
+        if w == 'ldw':
+            inertia_weight = w_max - (t / n_iterations) * (w_max - w_min)
         # Updating the velocity
         particles_velocity = (inertia_weight * particles_velocity +  # Momentum part
                               cognitive_weight * r1 * (local_best_positions - particles_positions) +  # Cognitive part

@@ -21,6 +21,13 @@ def plot_convergence_plots(history_list, algorithm_name):
     plt.title(f'Convergence Plots of {algorithm_name}')
     plt.grid(True)
     plt.legend()  # Show legend indicating which line corresponds to which label
+    # Add comments showing parameters
+    if algorithm_name == 'PSO':
+        plot_comment = f"Size={n_individuals}\nw={w}\nc1={c1}\nc2={c2}"
+    else:
+        plot_comment = f"Size={n_individuals}"
+    plt.text(0.9, 0.69, plot_comment, horizontalalignment='center', verticalalignment='center',
+             transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))
     plt.show()
 
 
@@ -29,7 +36,12 @@ def run_func_n_times(func, algo, bounds, n_individuals, n_generations, n=30):
     for i in range(n):
         random_seed = np.random.randint(0, 100)
         np.random.seed(random_seed)
-        best_position, best_value, best_fitness_history = algo(func, bounds, n_individuals, n_generations)
+        best_position, best_value, best_fitness_history = 0, 0, 0
+        if algo == PSO:
+            best_position, best_value, best_fitness_history = algo(func, bounds, n_individuals, n_generations, w=w,
+                                                                   c1=c1, c2=c2)
+        elif algo == GWO:
+            best_position, best_value, best_fitness_history = algo(func, bounds, n_individuals, n_generations)
         result = [random_seed, best_position, best_value, best_fitness_history]
         results_with_seeds.append(result)
 
@@ -70,7 +82,9 @@ file_path = f"Comparing_algorithms_results_{current_time}.json"
 
 # Initializing number of individuals and max_Generations
 n_individuals, n_generations = 300, 80
-
+w = 0.5
+c1 = 1
+c2 = 2
 history_pso_list = []
 history_gwo_list = []
 
@@ -79,34 +93,42 @@ np.random.seed(20)
 
 print(f'Function\t\t\t\t\tPSO\t\t\t\t\t\t\tGWO')
 print(f'\t\t\t\t\t\t\tMean\t\tStd\t\t\t\tMean\t\tStd')
+for func, value in bounds.items():
+    mean_std_pso, results_pso, history_pso = run_func_n_times(value[0], PSO, value[1], n_individuals, n_generations)
+    mean_std_gwo, results_gwo, history_gwo = run_func_n_times(value[0], GWO, value[1], n_individuals, n_generations)
+    history_pso_list.append(history_pso)
+    history_gwo_list.append(history_gwo)
+    print(
+        f'{func}\t\t\t\t\t{mean_std_pso[0]:.7f}\t{mean_std_pso[1]:.7f}\t\t{mean_std_gwo[0]:.7f}\t{mean_std_gwo[1]:.7f}')
+
 # Open the file in append mode outside the loop
-with open(file_path, 'a') as f:
-    for func, value in bounds.items():
-        mean_std_pso, results_pso, history_pso = run_func_n_times(value[0], PSO, value[1], n_individuals, n_generations)
-        mean_std_gwo, results_gwo, history_gwo = run_func_n_times(value[0], GWO, value[1], n_individuals, n_generations)
-        history_pso_list.append(history_pso)
-        history_gwo_list.append(history_gwo)
-        print(
-            f'{func}\t\t\t\t\t{mean_std_pso[0]:.7f}\t{mean_std_pso[1]:.7f}\t\t{mean_std_gwo[0]:.7f}\t{mean_std_gwo[1]:.7f}')
-        # Create a dictionary to store the data
-        json_data = {
-            'func_name': func,
-            'Algo_1': 'PSO',
-            'PSO_seeds': [item[0] for item in results_pso],
-            'PSO_positions': [item[1].tolist() for item in results_pso],
-            'PSO_values': [item[2] for item in results_pso],
-            'PSO_Mean': mean_std_pso[0],
-            'PSO_Std': mean_std_pso[1],
-            'Algo_2': 'GWO',
-            'GWO_seeds': [item[0] for item in results_gwo],
-            'GWO_positions': [item[1].tolist() for item in results_gwo],
-            'GWO_values': [item[2] for item in results_gwo],
-            'GWO_Mean': mean_std_gwo[0],
-            'GWO_Std': mean_std_gwo[1]
-        }
-        # Write the dictionary to the JSON file
-        json.dump(json_data, f, indent=4)  # Use 'indent' for pretty formatting (optional)
-        f.write('\n')  # Add a newline to separate JSON objects
+# with open(file_path, 'a') as f:
+#     for func, value in bounds.items():
+#         mean_std_pso, results_pso, history_pso = run_func_n_times(value[0], PSO, value[1], n_individuals, n_generations)
+#         mean_std_gwo, results_gwo, history_gwo = run_func_n_times(value[0], GWO, value[1], n_individuals, n_generations)
+#         history_pso_list.append(history_pso)
+#         history_gwo_list.append(history_gwo)
+#         print(
+#             f'{func}\t\t\t\t\t{mean_std_pso[0]:.7f}\t{mean_std_pso[1]:.7f}\t\t{mean_std_gwo[0]:.7f}\t{mean_std_gwo[1]:.7f}')
+#         # Create a dictionary to store the data
+#         json_data = {
+#             'func_name': func,
+#             'Algo_1': 'PSO',
+#             'PSO_seeds': [item[0] for item in results_pso],
+#             'PSO_positions': [item[1].tolist() for item in results_pso],
+#             'PSO_values': [item[2] for item in results_pso],
+#             'PSO_Mean': mean_std_pso[0],
+#             'PSO_Std': mean_std_pso[1],
+#             'Algo_2': 'GWO',
+#             'GWO_seeds': [item[0] for item in results_gwo],
+#             'GWO_positions': [item[1].tolist() for item in results_gwo],
+#             'GWO_values': [item[2] for item in results_gwo],
+#             'GWO_Mean': mean_std_gwo[0],
+#             'GWO_Std': mean_std_gwo[1]
+#         }
+#         # Write the dictionary to the JSON file
+#         json.dump(json_data, f, indent=4)  # Use 'indent' for pretty formatting (optional)
+#         f.write('\n')  # Add a newline to separate JSON objects
 
 # Plotting the convergence for PSO and GWO respectively
 plot_convergence_plots(history_pso_list, "PSO")
