@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tkinter import scrolledtext  # Import the scrolledtext module for the Text widget
+from tkinter import scrolledtext 
 from math import sin, pi
 from Bench_Mark import schwefel_function, bohachevsky_function, ackley_function, himmelblau_function
 from GWO_Animated import GWO_animated
@@ -27,6 +27,12 @@ def generate_output_text(bench_str, best_position, best_value):
     output += "Best value: {:.6f}".format(best_value) + "\n"
     return output
 
+def is_float(s):
+    try:
+        float(s)
+        return True
+    except ValueError :
+        return False
 
 def submit():
     try:
@@ -48,11 +54,37 @@ def submit():
         bound = bounds[bench_str][0]
         plot = plot_var.get()
 
+
+        # if(algorithm=="PSO"):
+        #     try:
+        #           # Get the string value
+        #         c1 = float(pos_c1.get())        # Convert to float
+        #         c2 = float(pos_c2.get())       # Get the string value
+        #     except ValueError as e:
+        #         messagebox.showwarning("Invalid Input", str(e)) 
+   
+        
         if algorithm == "PSO":
-            if plot == "3D":
-                best_position, best_value = PSO_animated(benchmark, bound, n_individuals, generations, plot_3d=1)
+            c1 = pos_c1.get()        # Convert to float
+            c2 = pos_c2.get()
+            pos_w = str(w_entry.get())
+            if not c1 or not c2:
+                raise ValueError("Values cannot be empty.")
+            c1 = float(c1)
+            c2 = float(c2)
+            if pos_w == 'ldw':
+                pos_w = 'ldw'
+            elif is_float(pos_w) == True:
+                pos_w = float(pos_w)  # Convert to float
             else:
-                best_position, best_value = PSO_animated(benchmark, bound, n_individuals, generations, plot_3d=0)
+                raise ValueError("Invalid input for pos weight.")       
+
+            if plot == "3D":
+                best_position, best_value = PSO_animated(benchmark, bound, n_individuals, generations,
+                                                          w=pos_w, c1=c1, c2=c2, plot_3d=1)
+            else:
+                best_position, best_value = PSO_animated(benchmark, bound, n_individuals, generations,
+                                                          w=pos_w, c1=c1, c2=c2, plot_3d=0)
         elif algorithm == "GWO":
             if plot == "3D":
                 best_position, best_value = GWO_animated(benchmark, bound, n_individuals, generations, plot_3d=1)
@@ -83,6 +115,9 @@ ttk.Label(frame, text="Num of Individuals :").grid(row=1, column=0, sticky="w", 
 ttk.Label(frame, text="Generations :").grid(row=2, column=0, sticky="w", pady=5)
 ttk.Label(frame, text="Algorithm:").grid(row=3, column=0, sticky="w", pady=5)
 ttk.Label(frame, text="Plot :").grid(row=4, column=0, sticky="w", pady=5)
+ttk.Label(frame, text="pos weight :").grid(row=5, column=0, sticky="w", pady=5)
+ttk.Label(frame, text="c1 :").grid(row=6, column=0, sticky="w", pady=5)
+ttk.Label(frame, text="c2 :").grid(row=7, column=0, sticky="w", pady=5)
 
 # Comboboxes
 benchmark_var = tk.StringVar()
@@ -91,6 +126,7 @@ benchmark_combobox = ttk.Combobox(frame, textvariable=benchmark_var,
                                           "himmelblau_function"], width=20, state="readonly")
 benchmark_combobox.grid(row=0, column=1, pady=5, padx=5)
 benchmark_combobox.set("bohachevsky_function")
+
 # Entries
 n_individuals_var = tk.StringVar()
 n_individuals_entry = ttk.Entry(frame, textvariable=n_individuals_var, width=23)
@@ -103,18 +139,49 @@ generations_entry.grid(row=2, column=1, pady=5, padx=5)
 algorithm_var = tk.StringVar()
 algorithm_combobox = ttk.Combobox(frame, textvariable=algorithm_var, values=["GWO", "PSO"], width=20, state="readonly")
 algorithm_combobox.grid(row=3, column=1, pady=5, padx=5)
-algorithm_combobox.set("GWO")
+algorithm_combobox.set("PSO")
+
+def pso_selected(event):
+    algo = algorithm_combobox.get()
+    if(algo == "GWO"):
+        w_entry.config(state="disabled")
+        c1_entry.config(state="disabled")
+        c2_entry.config(state="disabled")
+    else:
+        w_entry.config(state="normal")
+        c1_entry.config(state="normal")
+        c2_entry.config(state="normal")
+algorithm_combobox.bind("<<ComboboxSelected>>", pso_selected)
+
+
 
 plot_var = tk.StringVar()
 plot_combobox = ttk.Combobox(frame, textvariable=plot_var, values=["3D", "Contour"], width=20, state="readonly")
 plot_combobox.grid(row=4, column=1, pady=5, padx=5)
 plot_combobox.set("3D")
+
+pos_weight = tk.StringVar()
+w_entry = ttk.Entry(frame, textvariable=pos_weight, width=23)
+w_entry.grid(row=5, column=1, pady=5, padx=5)
+
+
+pos_c1 = tk.StringVar()
+c1_entry = ttk.Entry(frame, textvariable=pos_c1, width=23)
+c1_entry.grid(row=6, column=1, pady=5, padx=5)
+
+
+pos_c2= tk.StringVar()
+c2_entry = ttk.Entry(frame, textvariable=pos_c2, width=23)
+c2_entry.grid(row=7, column=1, pady=5, padx=5)
+
+
+
 # Submit Button
 submit_button = ttk.Button(frame, text="Submit", command=submit)
-submit_button.grid(row=5, column=0, columnspan=2, pady=10)
+submit_button.grid(row=8, column=0, columnspan=2, pady=10)
 
 # Create text field for output
 output_text = scrolledtext.ScrolledText(frame, width=50, height=10, state=tk.DISABLED)
-output_text.grid(row=6, column=0, columnspan=3, pady=10, sticky="nsew")
+output_text.grid(row=9, column=0, columnspan=3, pady=10, sticky="nsew")
 root.resizable(False, False)
 root.mainloop()

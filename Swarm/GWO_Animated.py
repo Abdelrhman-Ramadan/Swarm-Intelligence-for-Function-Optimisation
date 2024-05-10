@@ -1,4 +1,4 @@
-from Swarm.Common_libs import np, plt, FuncAnimation
+from Common_libs import np, plt, FuncAnimation
 
 
 def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot_3d=0):
@@ -84,21 +84,28 @@ def GWO_animated(obj_func, bounds, num_wolves=5, max_iterations=100, dim=2, plot
 
         ax.clear()
         if plot_3d == 1:
-            ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.6)
-            ax.scatter(population[:, 0], population[:, 1], obj_func(population.T),
-                       color='red', alpha=0.5)
-            ax.scatter(alpha_pos[0], alpha_pos[1], obj_func(alpha_pos),
-                       color='blue', marker='*', label='Alpha Wolf')
-            ax.scatter(beta_pos[0], beta_pos[1], obj_func(beta_pos),
-                       color='green', marker='^', label='Beta Wolf')
-            ax.scatter(delta_pos[0], delta_pos[1], obj_func(delta_pos),
-                       color='yellow', marker='s', label='Delta Wolf')
+            try:
+                ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.6)
+                ax.scatter(population[:, 0], population[:, 1], obj_func(population.T),
+                        color='red', alpha=0.5)
+                ax.scatter(alpha_pos[0], alpha_pos[1], obj_func(alpha_pos),
+                        color='blue', marker='*', label='Alpha Wolf')
+                ax.scatter(beta_pos[0], beta_pos[1], obj_func(beta_pos),
+                        color='green', marker='^', label='Beta Wolf')
+                ax.scatter(delta_pos[0], delta_pos[1], obj_func(delta_pos),
+                        color='yellow', marker='s', label='Delta Wolf')
+            except ValueError as e :
+                pass
         else:
-            ax.contour(X, Y, Z, levels=20)
-            ax.scatter(population[:, 0], population[:, 1], color='red', alpha=0.5)
-            ax.scatter(alpha_pos[0], alpha_pos[1], color='blue', marker='*', label='Alpha Wolf')
-            ax.scatter(beta_pos[0], beta_pos[1], color='green', marker='^', label='Beta Wolf')
-            ax.scatter(delta_pos[0], delta_pos[1], color='yellow', marker='s', label='Delta Wolf')
+            try:
+                ax.contour(X, Y, Z, levels=20)
+                ax.scatter(population[:, 0], population[:, 1], color='red', alpha=0.5)
+                ax.scatter(alpha_pos[0], alpha_pos[1], color='blue', marker='*', label='Alpha Wolf')
+                ax.scatter(beta_pos[0], beta_pos[1], color='green', marker='^', label='Beta Wolf')
+                ax.scatter(delta_pos[0], delta_pos[1], color='yellow', marker='s', label='Delta Wolf')
+            except ValueError as e:
+                pass
+
         ax.legend()
         ax.set_title(f'Iteration {iteration + 1}')
 

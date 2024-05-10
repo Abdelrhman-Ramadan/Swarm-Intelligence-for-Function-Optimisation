@@ -1,4 +1,4 @@
-from Swarm.Common_libs import np, plt, FuncAnimation
+from Common_libs import np, plt, FuncAnimation
 
 
 def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, clip=1, w='ldw', c1=1.5, c2=1.5, plot_3d=0):
@@ -65,15 +65,21 @@ def PSO_animated(objective_function, bounds, n_particles, n_iterations, d=2, cli
         ax.clear()
 
         if plot_3d == 1:
-            ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.6)
-            ax.scatter(particles_positions[:, 0], particles_positions[:, 1], objective_function(particles_positions.T),
-                       color='red', alpha=0.5)
-            ax.scatter(global_best_position[0], global_best_position[1], objective_function(global_best_position),
-                       color='blue', marker='*', label='Global Best')
+            try:
+                ax.plot_surface(X, Y, Z, cmap='viridis', alpha=0.6)
+                ax.scatter(particles_positions[:, 0], particles_positions[:, 1], objective_function(particles_positions.T),
+                        color='red', alpha=0.5)
+                ax.scatter(global_best_position[0], global_best_position[1], objective_function(global_best_position),
+                        color='blue', marker='*', label='Global Best')
+            except ValueError as e :
+                pass
         else:
-            ax.contour(X, Y, Z, levels=20)
-            ax.scatter(particles_positions[:, 0], particles_positions[:, 1], color='red', alpha=0.5)
-            ax.scatter(global_best_position[0], global_best_position[1], color='blue', marker='*', label='Global Best')
+            try:
+                ax.contour(X, Y, Z, levels=20)
+                ax.scatter(particles_positions[:, 0], particles_positions[:, 1], color='red', alpha=0.5)
+                ax.scatter(global_best_position[0], global_best_position[1], color='blue', marker='*', label='Global Best')
+            except ValueError as e :
+                pass
         ax.legend()
         ax.set_title(f'Iteration {i + 1}')
 

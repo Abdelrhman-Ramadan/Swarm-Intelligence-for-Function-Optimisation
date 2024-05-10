@@ -1,7 +1,7 @@
-from Algorithms.gwo_algorithm import GWO
-from Swarm.GWO_Animated import GWO_animated
-from Swarm.PSO_Animated import PSO_animated
-from Swarm.Common_libs import np, plt, FuncAnimation
+from GWO_Animated import GWO_animated
+from PSO_Animated import PSO_animated
+from Common_libs import np, plt, FuncAnimation
+
 
 
 # (-100, 100)
