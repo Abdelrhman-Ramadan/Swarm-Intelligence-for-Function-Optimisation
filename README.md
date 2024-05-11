@@ -31,10 +31,31 @@ Follow the GUI instructions to run PSO and GWO algorithms, adjust parameters, an
 
 ## Benchmark Functions
 Supported functions:
-- **Bohachevsky Function**: $$ f(x, y) = x^2 + 2y^2 - 0.3\cos(3\pi x) - 0.4\cos(4\pi y) + 0.7 $$
-- **Ackley Function**: $$ f(x, y) = -20\exp\left(-0.2\sqrt{0.5(x^2 + y^2)}\right) - \exp\left(0.5(\cos(2\pi x) + \cos(2\pi y))\right) + e + 20 $$
-- **Schwefel Function**: $$ f(x) = 418.9829d - \sum_{i=1}^{d} x_i\sin(\sqrt{|x_i|}) $$
-- **Himmelblau Function**: $$ f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2 $$
+- **Bohachevsky Function**:
+
+
+$$
+f(x, y) = x^2 + 2y^2 - 0.3\cos(3\pi x) - 0.4\cos(4\pi y) + 0.7
+$$
+
+- **Ackley Function**:
+
+$$
+f(x, y) = -20\exp\left(-0.2\sqrt{0.5(x^2 + y^2)}\right) - \exp\left(0.5(\cos(2\pi x) + \cos(2\pi y))\right) + e + 20
+$$
+
+- **Schwefel Function**:
+
+$$
+f(x) = 418.9829d - \sum_{i=1}^{d} x_i\sin(\sqrt{|x_i|})
+$$
+
+- **Himmelblau Function**:
+
+$$
+f(x, y) = (x^2 + y - 11)^2 + (x + y^2 - 7)^2
+$$
+
 
 ## Dependencies
 - **NumPy**: For numerical computations.
